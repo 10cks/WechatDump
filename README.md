@@ -21,3 +21,9 @@ python ./decrypt.py -k 密钥 -d ./MicroMsg.db
 ├── MSG1.db
 └── MSG2.db
 ```
+
+数据库语法：
+```
+SELECT * FROM "Contact"
+SELECT * FROM "MSG" WHERE StrContent  like'%账号%'
+```
