@@ -6,6 +6,7 @@
 #include <iomanip>
 
 std::map<std::string, std::vector<int>> VersionList = {
+	// 微信昵称、微信账号、微信手机号、微信邮箱（高版本失效，这个随便填）、微信KEY
     {"3.9.7.25", {63484096, 63482760, 63482568, 0, 63484032}}
 };
 
