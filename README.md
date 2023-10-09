@@ -6,14 +6,18 @@ Python 版：https://github.com/xaoyaoo/PyWxDump
 C# 版：https://github.com/AdminTest0/SharpWxDump
 
 编译：
+```
 x86_64-w64-mingw32-g++ main.cpp -o hello.exe -lversion -w -s -g0 -static-libgcc -static-libstdc++
+```
 
 解密：
+```
 python ./decrypt.py -k 密钥 -d ./MicroMsg.db
-
+```
 数据库存储路径：
-
-C:\Users\[root]\Documents\WeChat Files\[wxid_yye8m0zgtooh22\Msg]
+```
+C:\Users\[root]\Documents\WeChat Files\[wxid_yye8m0zgtooh22]\Msg
+```
 
 数据库结构：
 ```
