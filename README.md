@@ -7,12 +7,12 @@ Python 版：https://github.com/xaoyaoo/PyWxDump
 
 编译：
 ```
-x86_64-w64-mingw32-g++ main.cpp -o hello.exe -lversion -w -s -g0 -static-libgcc -static-libstdc++
+x86_64-w64-mingw32-g++ main.cpp -o WechatDump.exe -lversion -w -s -g0 -static-libgcc -static-libstdc++
 ```
 
 解密：
 ```
-python ./decrypt.py -k 密钥 -d ./MicroMsg.db
+python ./decrypt.py -k 密钥 -d ./[MicroMsg.db]
 ```
 微信数据库加密方式： PBKDF2 加密算法以及 AES 加密算法，使用 PBKDF2 算法从输入的密码生成加密密钥。PBKDF2 算法是一种密码基准函数，它可以从输入的密码和盐值生成一个加密密钥。
 读取要解密的文件，并检查 HMAC 是否正确。HMAC 是一种基于密钥的哈希函数，用于验证数据的完整性和真实性。
