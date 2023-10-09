@@ -8,6 +8,7 @@ x86_64-w64-mingw32-g++ main.cpp -o hello.exe -lversion -w -s -g0 -static-libgcc 
 python ./decrypt.py -k 密钥 -d ./MicroMsg.db
 
 数据库结构：
+```
 .
 ├── FTSMSG0.db
 ├── FTSMSG1.db
@@ -19,3 +20,4 @@ python ./decrypt.py -k 密钥 -d ./MicroMsg.db
 ├── MSG0.db 聊天记录
 ├── MSG1.db
 └── MSG2.db
+```
