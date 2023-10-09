@@ -8,7 +8,8 @@
 using namespace std;
 
 map<string, vector<int>> VersionList = {
-    {"3.9.7.25", {63484096, 63482760, 63482568, 0, 63484032}}
+    {"3.9.7.25", {63484096, 63482760, 63482568, 0, 63484032}},
+	{"3.9.7.29", {63486984, 63488320, 63486792, 0, 63488256}},
 };
 
 DWORD GetProcessId(const char* processName)
