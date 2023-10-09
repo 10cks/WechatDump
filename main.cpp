@@ -5,8 +5,9 @@
 #include <vector>
 #include <iomanip>
 
-std::map<std::string, std::vector<int>> VersionList = {
-	// 微信昵称、微信账号、微信手机号、微信邮箱（高版本失效，这个随便填）、微信KEY
+using namespace std;
+
+map<string, vector<int>> VersionList = {
     {"3.9.7.25", {63484096, 63482760, 63482568, 0, 63484032}}
 };
 
@@ -57,7 +58,7 @@ MODULEENTRY32 GetModule(const char* moduleName, DWORD processId)
     return modEntry;
 }
 
-std::string GetWeChatVersion(const std::string& filePath)
+string GetWeChatVersion(const string& filePath)
 {
     DWORD verHandle = 0;
     UINT size = 0;
@@ -66,7 +67,7 @@ std::string GetWeChatVersion(const std::string& filePath)
 
     if (verSize != NULL)
     {
-        std::vector<char> verData(verSize);
+        vector<char> verData(verSize);
         if (GetFileVersionInfo(filePath.c_str(), verHandle, verSize, verData.data()))
         {
             if (VerQueryValue(verData.data(), "\\", (VOID FAR* FAR*)&lpBuffer, &size))
@@ -81,10 +82,10 @@ std::string GetWeChatVersion(const std::string& filePath)
                         int patch = (verInfo->dwFileVersionLS >> 16) & 0xffff;
                         int revision = (verInfo->dwFileVersionLS >> 0) & 0xffff;
 
-                        return std::to_string(major) + "." +
-                               std::to_string(minor) + "." +
-                               std::to_string(patch) + "." +
-                               std::to_string(revision);
+                        return to_string(major) + "." +
+                               to_string(minor) + "." +
+                               to_string(patch) + "." +
+                               to_string(revision);
                     }
                 }
             }
@@ -102,46 +103,46 @@ bool ReadMemory(HANDLE hProcess, LPVOID baseAddress, LPVOID buffer, SIZE_T size)
 
 int main()
 {
-	std::cout << "Program running..." << std::endl;
+	cout << "Program running..." << endl;
 	DWORD pid = GetProcessId("WeChat.exe");
 	if (pid == 0)
 	{
-	std::cout << "[-] WeChat No Run" << std::endl;
+	cout << "[-] WeChat No Run" << endl;
 	return 1;
 	} else {
-	std::cout << "[+] WeChat Running" << std::endl;
-	std::cout << "[+] PID:"<<pid << std::endl;
+	cout << "[+] WeChat Running" << endl;
+	cout << "[+] PID:"<<pid << endl;
 	}
 
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
 	if (!hProcess)
 	{
-	std::cout << "Error opening process." << std::endl;
+	cout << "Error opening process." << endl;
 	return 1;
 	} else {
-	std::cout << "[+] WeChat can OpenProcess" << std::endl;
+	cout << "[+] WeChat can OpenProcess" << endl;
 	}
 	
 	// 获取 WeChatWin.dll Base 及 WeChat 版本
 	MODULEENTRY32 modEntry = GetModule("WeChatWin.dll", pid);
-	std::string version = GetWeChatVersion(modEntry.szExePath);
+	string version = GetWeChatVersion(modEntry.szExePath);
 	if (modEntry.modBaseAddr == NULL)
 	{
-	    std::cout << "Error finding module." << std::endl;
+	    cout << "Error finding module." << endl;
 	    return 1;
 	}
 	else {
-		std::cout << "[+] WeChatWin.dll Base: " << (void*)modEntry.modBaseAddr << std::endl;
+		cout << "[+] WeChatWin.dll Base: " << (void*)modEntry.modBaseAddr << endl;
 		if (version.empty())
 		{
-		std::cout << "[-] Error getting WeChat version." << std::endl;
+		cout << "[-] Error getting WeChat version." << endl;
 		return 1;
 		}
-		std::cout << "[+] WeChat version: " << version << std::endl;
+		cout << "[+] WeChat version: " << version << endl;
 	}
 	
 	// 根据版本选择偏移
-	std::vector<int> offsets = VersionList[version];
+	vector<int> offsets = VersionList[version];
 	
 	// 打印出每个偏移的内存内容
 	char buffer[100];
@@ -157,32 +158,32 @@ int main()
 		    unsigned char data[32];
 		    if (ReadMemory(hProcess, (LPVOID)nextAddress, &data, sizeof(data)))
 		    {
-		        std::cout << "Memory at offset " << offset << ": ";
+		        cout << "Memory at offset " << offset << ": ";
 		        for (unsigned char byte : data)
 		        {
-		            std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)byte;
+		            cout << hex << setw(2) << setfill('0') << (int)byte;
 		        }
-		        std::cout << std::endl;
+		        cout << endl;
 		    }
 		    else
 		    {
-		        std::cout << "Error reading memory at offset " << offset << std::endl;
+		        cout << "Error reading memory at offset " << offset << endl;
 		    }
 		}
 		else
 		{
-		    std::cout << "Error reading memory at offset " << offset << std::endl;
+		    cout << "Error reading memory at offset " << offset << endl;
 		}
 	    }
 	    else // For all other offsets, just read directly
 	    {
 		if (ReadMemory(hProcess, address, buffer, sizeof(buffer)))
 		{
-		    std::cout << "Memory at offset " << offset << ": " << buffer << std::endl;
+		    cout << "Memory at offset " << offset << ": " << buffer << endl;
 		}
 		else
 		{
-		    std::cout << "Error reading memory at offset " << offset << std::endl;
+		    cout << "Error reading memory at offset " << offset << endl;
 		}
 	    }
 	    ++index;
