@@ -1,5 +1,7 @@
 # WechatDump
-微信聊天记录提取
+微信聊天记录提取（C++版）
+Python 版：https://github.com/xaoyaoo/PyWxDump
+C# 版：https://github.com/AdminTest0/SharpWxDump
 
 编译：
 x86_64-w64-mingw32-g++ main.cpp -o hello.exe -lversion -w -s -g0 -static-libgcc -static-libstdc++
