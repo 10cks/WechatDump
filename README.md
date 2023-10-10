@@ -1,5 +1,5 @@
 # WechatDump
-微信聊天记录提取（C++版）
+微信聊天记录提取（Cpp版）
 
 C# 版：https://github.com/AdminTest0/SharpWxDump
 
