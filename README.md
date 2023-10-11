@@ -59,3 +59,6 @@ go mod init github.com/golang/crypto // 初始化 mod
 go mod tidy // 进行包检测
 set GOCACHE=D:\安全工具\微信取证 // 设置编译缓存路径，如果设置过可以不用设置了
 go build decrypt.go // 编译
+```
+
+微信注册表：`\HKEY_CURRENT_USER\SOFTWARE\Tencent\WeChat`
