@@ -30,7 +30,7 @@ C:\Users\[root]\Documents\WeChat Files\[wxid_yye8m0zgtooh22]\Msg
 数据库结构：
 ```
 .
-├── FTSMSG0.db
+├── FTSMSG0.db 搜索记录
 ├── FTSMSG1.db
 ├── FTSMSG2.db
 ├── MediaMSG0.db 语音消息
