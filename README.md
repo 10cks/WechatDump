@@ -48,3 +48,10 @@ SELECT * FROM "MSG" WHERE StrContent  like'%账号%'
 
 > PS：每台设备、每个微信账号对应一个key，切换设备或者微信账号，key都会变化；
 > 同一台设备，同一个微信，只要安装新版微信时候，没有删除旧版的数据，那么key就不会改变。
+
+decrypt 重构（go 版）
+```
+go mod init github.com/golang/crypto // 初始化 mod
+go mod tidy // 进行包检测
+set GOCACHE=D:\安全工具\微信取证 // 设置编译缓存路径，如果设置过可以不用设置了
+go build decrypt.go // 编译
