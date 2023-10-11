@@ -7,6 +7,8 @@ C# 版：https://github.com/AdminTest0/SharpWxDump
 
 Python 版：https://github.com/xaoyaoo/PyWxDump
 
+Rust 版：https://github.com/0xlane/wechat-dump-rs
+
 编译：
 ```
 x86_64-w64-mingw32-g++ main.cpp -o WechatDump.exe -lversion -w -s -g0 -static-libgcc -static-libstdc++
