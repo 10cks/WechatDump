@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include <iomanip>
+#include <regex>
 
 using namespace std;
 
@@ -146,6 +147,48 @@ bool ReadMemory(HANDLE hProcess, LPVOID baseAddress, LPVOID buffer, SIZE_T size)
     return ReadProcessMemory(hProcess, baseAddress, buffer, size, &bytesRead);
 }
 
+// db 存储路径
+void search_memory(char* buffer, size_t size) {
+    string data(buffer, size);
+
+    regex e ("/[a-zA-Z]:\\Users\\.{0,50}\\Documents\\WeChat Files\\wxid_[0-9a-zA-Z]{14}/");
+    smatch match;
+
+    regex_search(data, match, e);
+
+    for (size_t i = 0; i < match.size(); ++i) {
+        ssub_match sub_match = match[i];
+        string piece = sub_match.str();
+        cout << "  FilePath"<< ": " << piece << '\n';
+    }
+}
+
+void scan_memory_region(HANDLE hProcess, DWORD_PTR startAddress, DWORD_PTR regionSize)
+{
+    const size_t bufferSize = 0x10000; // 64 KB
+    char* bufferFile = new char[bufferSize];
+
+    DWORD_PTR bytesRemaining = regionSize;
+    DWORD_PTR currentAddress = startAddress;
+
+    while (bytesRemaining > 0)
+    {
+        DWORD_PTR bytesToRead = min(bytesRemaining, bufferSize);
+
+        // 读取内存区域的内容
+        if (ReadMemory(hProcess, (LPVOID)currentAddress, bufferFile, bytesToRead))
+        {
+            // 在内存区域中搜索数据
+            search_memory(bufferFile, bytesToRead);
+        }
+
+        bytesRemaining -= bytesToRead;
+        currentAddress += bytesToRead;
+    }
+
+    delete[] bufferFile;
+}
+
 int main()
 {
 	cout << "Program running..." << endl;
@@ -159,6 +202,7 @@ int main()
 	cout << "[+] PID:"<<pid << endl;
 	}
 
+	// 打开微信进程
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
 	if (!hProcess)
 	{
@@ -185,6 +229,7 @@ int main()
 		}
 		cout << "[+] WeChat version: " << version << endl;
 	}
+	
 	
 	// 根据版本选择偏移
 	vector<int> offsets = VersionList[version];
@@ -220,7 +265,7 @@ int main()
 		    cout << "Error reading memory at offset " << offset << endl;
 		}
 	    }
-	    else // For all other offsets, just read directly
+	    else
 	    {
 		if (ReadMemory(hProcess, address, buffer, sizeof(buffer)))
 		{
@@ -233,7 +278,37 @@ int main()
 	    }
 	    ++index;
 	}
-    
+	// 数据库路径
+    MEMORY_BASIC_INFORMATION memInfo;
+    char* addr = 0;
+    while (VirtualQueryEx(hProcess, addr, &memInfo, sizeof(memInfo)) == sizeof(memInfo))
+    {
+        if (memInfo.State == MEM_COMMIT)
+        {
+            std::string buffer(memInfo.RegionSize, '\0');
+            SIZE_T bytesRead;
+            if (ReadProcessMemory(hProcess, addr, &buffer[0], memInfo.RegionSize, &bytesRead))
+            {
+                regex re("[a-zA-Z]:\\\\Users\\\\.{0,50}\\\\Documents\\\\WeChat Files\\\\wxid_[0-9a-zA-Z]{14}");
+                smatch match;
+                if (regex_search(buffer, match, re))
+                {
+                    for (size_t i = 0; i < match.size(); ++i)
+				    {
+				        ssub_match sub_match = match[i];
+				        string piece = sub_match.str(); 
+				        string allPath = piece + "\\Msg\\Multi";
+				        cout << "DB Path at address " << reinterpret_cast<void*>(addr) << ": "<< allPath << endl;
+				    }
+				    break;
+                }
+            }
+        }
+
+        addr += memInfo.RegionSize;
+    }
+
+
 	CloseHandle(hProcess);
 
 	return 0;
