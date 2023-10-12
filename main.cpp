@@ -5,6 +5,7 @@
 #include <vector>
 #include <iomanip>
 #include <regex>
+#include <thread>
 
 using namespace std;
 
@@ -147,48 +148,6 @@ bool ReadMemory(HANDLE hProcess, LPVOID baseAddress, LPVOID buffer, SIZE_T size)
     return ReadProcessMemory(hProcess, baseAddress, buffer, size, &bytesRead);
 }
 
-// db 存储路径
-void search_memory(char* buffer, size_t size) {
-    string data(buffer, size);
-
-    regex e ("/[a-zA-Z]:\\Users\\.{0,50}\\Documents\\WeChat Files\\wxid_[0-9a-zA-Z]{14}/");
-    smatch match;
-
-    regex_search(data, match, e);
-
-    for (size_t i = 0; i < match.size(); ++i) {
-        ssub_match sub_match = match[i];
-        string piece = sub_match.str();
-        cout << "  FilePath"<< ": " << piece << '\n';
-    }
-}
-
-void scan_memory_region(HANDLE hProcess, DWORD_PTR startAddress, DWORD_PTR regionSize)
-{
-    const size_t bufferSize = 0x10000; // 64 KB
-    char* bufferFile = new char[bufferSize];
-
-    DWORD_PTR bytesRemaining = regionSize;
-    DWORD_PTR currentAddress = startAddress;
-
-    while (bytesRemaining > 0)
-    {
-        DWORD_PTR bytesToRead = min(bytesRemaining, bufferSize);
-
-        // 读取内存区域的内容
-        if (ReadMemory(hProcess, (LPVOID)currentAddress, bufferFile, bytesToRead))
-        {
-            // 在内存区域中搜索数据
-            search_memory(bufferFile, bytesToRead);
-        }
-
-        bytesRemaining -= bytesToRead;
-        currentAddress += bytesToRead;
-    }
-
-    delete[] bufferFile;
-}
-
 int main()
 {
 	cout << "Program running..." << endl;
@@ -202,7 +161,7 @@ int main()
 	cout << "[+] PID:"<<pid << endl;
 	}
 
-	// 打开微信进程
+	// 获取微信进程句柄
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
 	if (!hProcess)
 	{
