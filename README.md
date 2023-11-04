@@ -62,3 +62,20 @@ go build decrypt.go // 编译
 ```
 
 微信注册表：`\HKEY_CURRENT_USER\SOFTWARE\Tencent\WeChat`
+
+输出：
+```
+D:\安全工具\微信取证\tools>WechatDump.exe
+Program running...
+[+] WeChat Running
+[+] PID:28144
+[+] WeChat can OpenProcess
+[+] WeChatWin.dll Base: 0x7ff908c60000
+[+] WeChat version: 3.9.7.29
+[+] Memory at offset 63486984:
+[+] Memory at offset 63488320: ret2myheart
+[+] Memory at offset 63486792: 19845069465
+[+] Memory at offset 0: MZ
+[+] Memory at offset 63488256: 3f3efe5aa6e742afa0d60bd6ac8c2d5a960d2eddf55242dca7ccc248b79030bb
+[+] DB Path at address 0x1fa0ff69000: C:\Users\root\Documents\WeChat Files\wxid_yye8m0zgtooh22\Msg\Multi
+```
