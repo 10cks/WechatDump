@@ -79,3 +79,6 @@ Program running...
 [+] Memory at offset 63488256: 3f3efe5aa6e742afa0d60bd6ac8c2d5a960d2eddf55242dca7ccc248b79030bb
 [+] DB Path at address 0x1fa0ff69000: C:\Users\root\Documents\WeChat Files\wxid_yye8m0zgtooh22\Msg\Multi
 ```
+
+![image](https://github.com/10cks/WechatDump/assets/47177550/4daa0c29-05d0-4c01-82b3-f04ea7a89235)
+
